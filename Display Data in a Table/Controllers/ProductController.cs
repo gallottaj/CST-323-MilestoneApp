@@ -13,9 +13,8 @@ namespace Display_Data_in_a_Table.Controllers
     {
         public IActionResult Index()
         {
-            HardCodedSampleDataRepository hardCodedSampleDataRepository = new HardCodedSampleDataRepository();
-
-            return View(hardCodedSampleDataRepository.GetAllProducts());
+            ProductsDAO products = new ProductsDAO();
+            return View(products.GetAllProducts());
         }
     }
 }
