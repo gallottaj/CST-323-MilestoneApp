@@ -25,5 +25,10 @@ namespace Display_Data_in_a_Table.Controllers
             List<ProductModel> productList = products.SearchProducts(searchTerm);
             return View("index", productList);
         }
+
+        public IActionResult SearchForm()
+        {
+            return View();
+        }
     }
 }
