@@ -26,6 +26,34 @@ namespace Display_Data_in_a_Table.Controllers
             return View("index", productList);
         }
 
+        public IActionResult ShowDetails(int id)
+        {
+            ProductsDAO products = new ProductsDAO();
+            ProductModel foundProduct = products.GetProductByID(id);
+            return View(foundProduct);
+        }
+        public IActionResult Edit(int id)
+        {
+            ProductsDAO products = new ProductsDAO();
+            ProductModel foundProduct = products.GetProductByID(id);
+            return View("ShowEdit", foundProduct);
+        }
+
+        public IActionResult ProcessEdit(ProductModel product)
+        {
+            ProductsDAO products = new ProductsDAO();
+            products.Update(product);
+            return View("Index", products.GetAllProducts());
+        }
+
+        public IActionResult Delete(int Id)
+        {
+            ProductsDAO products = new ProductsDAO();
+            ProductModel product = products.GetProductByID(Id);
+            products.Delete(product);
+            return View("Index", products.GetAllProducts());
+        }
+
         public IActionResult SearchForm()
         {
             return View();
