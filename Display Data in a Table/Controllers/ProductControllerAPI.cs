@@ -15,10 +15,20 @@ namespace Display_Data_in_a_Table.Controllers
     {
         //define requests
         [HttpGet]
-        public ActionResult<IEnumerable<ProductModel>> Index()
+        public ActionResult<IEnumerable<ProductModelDTO>> Index()
         {
+            //fetch all products from db
             ProductsDAO products = new ProductsDAO();
-            return products.GetAllProducts();
+            List<ProductModel> productList = products.GetAllProducts();
+            
+            List<ProductModelDTO> productDTOs = new List<ProductModelDTO>();
+            //translate list of objects
+            foreach (var p in productList)
+            {
+                productDTOs.Add(new ProductModelDTO(p));
+            }
+
+            return productDTOs;
         }
 
         [HttpGet("searchproducts/{searchTerm}")]
@@ -29,10 +39,15 @@ namespace Display_Data_in_a_Table.Controllers
         }
 
         [HttpGet("showoneproduct/{Id}")]
-        public ActionResult<ProductModel> ShowOneProduct(int Id)
+        public ActionResult<ProductModelDTO> ShowOneProduct(int Id)
         {
             ProductsDAO products = new ProductsDAO();
-            return products.GetProductByID(Id);
+
+            ProductModel p = products.GetProductByID(Id);
+
+            ProductModelDTO pDTO = new ProductModelDTO(p);
+
+            return pDTO;
         }
         /*        public IActionResult Edit(int id)
                 {
