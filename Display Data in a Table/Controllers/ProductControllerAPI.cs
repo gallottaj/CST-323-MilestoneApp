@@ -11,54 +11,56 @@ namespace Display_Data_in_a_Table.Controllers
 {
     [ApiController]
     [Route("api/")]
-    public class ProductControllerAPI : Controller
+    public class ProductControllerAPI : ControllerBase
     {
-        public IActionResult Index()
+        //define requests
+        [HttpGet]
+        public ActionResult<IEnumerable<ProductModel>> Index()
         {
             ProductsDAO products = new ProductsDAO();
-
-            return View(products.GetAllProducts());
+            return products.GetAllProducts();
         }
 
-        public IActionResult SearchResults(string searchTerm)
+        [HttpGet("searchproducts/{searchTerm}")]
+        public ActionResult<IEnumerable<ProductModel>> SearchProducts(string searchTerm)
         {
             ProductsDAO products = new ProductsDAO();
-
-            List<ProductModel> productList = products.SearchProducts(searchTerm);
-            return View("index", productList);
+            return products.SearchProducts(searchTerm);
         }
 
-        public IActionResult ShowDetails(int id)
+        [HttpGet("showoneproduct/{Id}")]
+        public ActionResult<ProductModel> ShowOneProduct(int Id)
         {
             ProductsDAO products = new ProductsDAO();
-            ProductModel foundProduct = products.GetProductByID(id);
-            return View(foundProduct);
+            return products.GetProductByID(Id);
         }
-        public IActionResult Edit(int id)
-        {
-            ProductsDAO products = new ProductsDAO();
-            ProductModel foundProduct = products.GetProductByID(id);
-            return View("ShowEdit", foundProduct);
-        }
+        /*        public IActionResult Edit(int id)
+                {
+                    ProductsDAO products = new ProductsDAO();
+                    ProductModel foundProduct = products.GetProductByID(id);
+                    return View("ShowEdit", foundProduct);
+                }*/
 
-        public IActionResult ProcessEdit(ProductModel product)
+        [HttpPut("processedit")]
+        public ActionResult<IEnumerable<ProductModel>> ProcessEdit(ProductModel product)
         {
             ProductsDAO products = new ProductsDAO();
             products.Update(product);
-            return View("Index", products.GetAllProducts());
+            return products.GetAllProducts();
         }
 
-        public IActionResult Delete(int Id)
+        [HttpPut("ProcessEditReturnOneItem")]
+        public ActionResult<ProductModel> ProcessEditReturnOneItem(ProductModel product)
         {
             ProductsDAO products = new ProductsDAO();
-            ProductModel product = products.GetProductByID(Id);
-            products.Delete(product);
-            return View("Index", products.GetAllProducts());
-        }
 
-        public IActionResult SearchForm()
-        {
-            return View();
+            products.Update(product);
+            return products.GetProductByID(product.Id);
         }
     }
 }
+
+/*        public IActionResult SearchForm()
+        {
+            return View();
+        }*/
